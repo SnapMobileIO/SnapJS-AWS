@@ -58,7 +58,7 @@ var upload = (0, _multer2.default)({
   })
 });
 
-router.get('/s3Signature', controller.s3Signature);
+router.post('/uploadToAws', upload.single('photo.jpg'), controller.uploadToAws);
 
 module.exports.router = router;
 module.exports.awsHelper = require('./aws.helper');
