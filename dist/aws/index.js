@@ -6,6 +6,8 @@ var _aws = require('./aws.controller');
 
 var controller = _interopRequireWildcard(_aws);
 
+var _snapjsAws = require('snapjs-aws');
+
 var _multer = require('multer');
 
 var _multer2 = _interopRequireDefault(_multer);
@@ -58,7 +60,7 @@ var upload = (0, _multer2.default)({
   })
 });
 
-router.post('/uploadToAws', upload.single('photo.jpg'), controller.uploadToAws);
+router.post('/uploadToAws', _snapjsAws.awsHelper.uploadToS3(), controller.uploadToAws);
 
 module.exports.router = router;
 module.exports.awsHelper = require('./aws.helper');
