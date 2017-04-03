@@ -39,9 +39,6 @@ _chai2.default.use(_chaiHttp2.default);
 var s3 = new _awsSdk2.default.S3();
 
 describe('AWS Component - Integration', function () {
-
-  it('should get a S3 signature object on /api/aws/s3Signature GET', function (done) {});
-
   /**
    * This test is long and nasty, but matches what happens with AWS image upload
    * 1. Retrieves S3 key from our server
