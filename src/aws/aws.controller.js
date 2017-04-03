@@ -1,17 +1,70 @@
 'use strict';
 
-export function uploadToAws(req, res, next) {
-  if (req.file) {
-    let fileObject = {
-      name: req.file.originalname,
-      type: req.file.mimetype,
-      size: req.file.size,
-      url: req.file.key
-    };
+import aws from 'aws-sdk';
+import crypto from 'crypto';
+import fs from 'fs';
 
-    // Send back the location of the file
-    res.status(200).json(fileObject);
-  } else {
-    res.status(200).json({ error: 'File did not upload to AWS' });
-  }
+const AWS_S3_FILES_BUCKET = process.env.AWS_S3_FILES_BUCKET;
+const AWS_S3_FILES_KEY_PREFIX = process.env.AWS_S3_FILES_KEY_PREFIX;
+const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
+const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
+
+export function uploadToAws(req, res, next) {
+  let file = req.file;
+
+  // Get the file type from the mimetype
+  let fileType = file.mimetype.substr(file.mimetype.indexOf('/') + 1);
+
+  // Clean the file name of special characters, extra spaces, etc.
+  let fileName = file.originalname
+                          .replace(/[^a-zA-Z0-9. ]/g, '')
+                          .replace(/\s+/g, ' ')
+                          .replace(/[ ]/g, '-');
+
+  // Create random string to ensure unique filenames
+  let randomBytes = crypto.randomBytes(32).toString('hex');
+
+  /**
+   * Create aws file key by combining random string and file name
+   * e.g., 73557ec94ea744c5c24bdb03ee114a1ef83ab2dd9bfb20f38999faea14564d19/DarthVader.jpg
+   */
+  let fileKey = `${AWS_S3_FILES_KEY_PREFIX}/${randomBytes}/${fileName}.${fileType}`;
+
+  // Configure aws
+  aws.config.accessKeyId = AWS_ACCESS_KEY_ID;
+  aws.config.secretAccessKey = AWS_SECRET_ACCESS_KEY;
+
+  // Create our bucket and set params
+  let bucket = new aws.S3({
+    params: { Bucket: AWS_S3_FILES_BUCKET }
+  });
+
+  let params = {
+    ACL: 'public-read',
+    Key: fileKey,
+    Body: fs.createReadStream(file.path),
+    Bucket: AWS_S3_FILES_BUCKET,
+    ContentType: file.mimetype != '' ? file.mimetype : 'application/octet-stream'
+  };
+
+  // Upload file to s3
+  bucket.upload(params, function(err, data) {
+    if (data) {
+      // Delete the file once it's been uploaded to s3
+      fs.unlinkSync(file.path);
+
+      let fileObject = {
+        name: fileName,
+        type: file.mimetype,
+        size: file.size,
+        url: fileKey
+      };
+
+      res.status(200).json(fileObject);
+    } else {
+      // Delete the file
+      fs.unlinkSync(file.path);
+      res.status(403).json(err);
+    }
+  });
 }

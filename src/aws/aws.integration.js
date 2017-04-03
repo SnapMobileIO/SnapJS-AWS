@@ -14,10 +14,6 @@ chai.use(chaiHttp);
 const s3 = new AWS.S3();
 
 describe('AWS Component - Integration', function() {
-
-  it('should get a S3 signature object on /api/aws/s3Signature GET', function(done) {
-  });
-
   /**
    * This test is long and nasty, but matches what happens with AWS image upload
    * 1. Retrieves S3 key from our server

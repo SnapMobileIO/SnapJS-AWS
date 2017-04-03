@@ -2,11 +2,12 @@
 
 import { Router } from 'express';
 import * as controller from './aws.controller';
-import * as awsHelper from './aws.helper';
+import multer from 'multer';
 
 const router = new Router();
+const upload = multer({ dest: 'uploads/' });
 
-router.post('/uploadToAws', awsHelper.uploadToS3(), controller.uploadToAws);
+router.post('/uploadToAws', upload.single('file'), controller.uploadToAws);
 
 module.exports.router = router;
 module.exports.awsHelper = require('./aws.helper');
