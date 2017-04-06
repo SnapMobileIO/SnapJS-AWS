@@ -12,14 +12,23 @@ const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 export function uploadToAws(req, res, next) {
   let file = req.file;
 
-  // Get the file type from the mimetype
-  let fileType = file.mimetype.substr(file.mimetype.indexOf('/') + 1);
-
   // Clean the file name of special characters, extra spaces, etc.
   let fileName = file.originalname
                           .replace(/[^a-zA-Z0-9. ]/g, '')
                           .replace(/\s+/g, ' ')
                           .replace(/[ ]/g, '-');
+
+  // Check if the fileName has a file extension
+  // If it doesn't we add a fileExt from the mimetype
+  let pattern = /\.[0-9a-z]+$/i;
+  let foundFileExt = fileName.match(pattern);
+  if (!foundFileExt) {
+    // Get the file extension from the mimetype
+    let fileExt = file.mimetype.substr(file.mimetype.indexOf('/') + 1);
+
+    // Add to the fileName
+    fileName += `.${fileExt}`;
+  }
 
   // Create random string to ensure unique filenames
   let randomBytes = crypto.randomBytes(32).toString('hex');
@@ -28,7 +37,8 @@ export function uploadToAws(req, res, next) {
    * Create aws file key by combining random string and file name
    * e.g., 73557ec94ea744c5c24bdb03ee114a1ef83ab2dd9bfb20f38999faea14564d19/DarthVader.jpg
    */
-  let fileKey = `${AWS_S3_FILES_KEY_PREFIX}/${randomBytes}/${fileName}.${fileType}`;
+  let fileKey = `${AWS_S3_FILES_KEY_PREFIX}/${randomBytes}/${fileName}`;
+
 
   // Configure aws
   aws.config.accessKeyId = AWS_ACCESS_KEY_ID;
