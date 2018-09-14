@@ -17,7 +17,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 var router = new _express.Router();
 var upload = (0, _multer2.default)({ dest: 'uploads/' });
 
-router.post('/uploadToAws', upload.single('file'), controller.uploadToAws);
+router.put('/uploadToAws', upload.single('file'), controller.uploadToAws);
+router.get('/s3Signature', controller.s3Signature);
 
 module.exports.router = router;
 module.exports.awsHelper = require('./aws.helper');

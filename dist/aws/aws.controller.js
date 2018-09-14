@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.uploadToAws = uploadToAws;
+exports.s3Signature = s3Signature;
 
 var _awsSdk = require('aws-sdk');
 
@@ -23,6 +24,7 @@ var AWS_S3_FILES_BUCKET = process.env.AWS_S3_FILES_BUCKET;
 var AWS_S3_FILES_KEY_PREFIX = process.env.AWS_S3_FILES_KEY_PREFIX;
 var AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
 var AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
+var AWS_S3_FILES_OVERSIZED_PREFIX = process.env.AWS_S3_FILES_OVERSIZED_PREFIX;
 
 function uploadToAws(req, res, next) {
   var file = req.file;
@@ -89,3 +91,44 @@ function uploadToAws(req, res, next) {
     }
   });
 }
+
+function s3Signature(req, res, next) {
+  // Configure aws
+  _awsSdk2.default.config.accessKeyId = AWS_ACCESS_KEY_ID;
+  _awsSdk2.default.config.secretAccessKey = AWS_SECRET_ACCESS_KEY;
+  // aws.config.region = 'us-west-2';
+  console.log("hello from snapmobile-aws 2.1!");
+  if (!req.query.fileType || !req.query.fileName) {
+    return res.status(422).json({ error: 'Missing required parameters' });
+  }
+  var s3 = new _awsSdk2.default.S3();
+  var fileType = req.query.fileType;
+
+  // Clean the file name of special characters, extra spaces, etc.
+  var fileName = req.query.fileName;
+
+  // Create random string to ensure unique filenames
+  var randomBytes = _crypto2.default.randomBytes(32).toString('hex');
+  var wholeFilePath = AWS_S3_FILES_OVERSIZED_PREFIX + '/' + randomBytes + '/' + fileName;
+
+  var s3Params = {
+    Bucket: AWS_S3_FILES_BUCKET,
+    Key: wholeFilePath,
+    Expires: 60,
+    ContentType: fileType,
+    ACL: 'public-read'
+  };
+  s3.getSignedUrl('putObject', s3Params, function (err, data) {
+    if (err) {
+      console.log(err);
+      return res.end();
+    }
+
+    var returnData = {
+      s3Signature: data,
+      url: wholeFilePath
+    };
+
+    res.status(200).json(returnData);
+  });
+};

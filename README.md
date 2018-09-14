@@ -1,5 +1,7 @@
 # SnapMobile-Aws
 
+# WARNING updating this module to 2.0.0+ is dependant on updating your @snapmobile/snapjs-admin to 1.0.0+
+
 # Usage
 
 Include this private module by adding the following under `dependencies` in `package.json`, and run `npm install`.
@@ -8,8 +10,8 @@ Include this private module by adding the following under `dependencies` in `pac
 
 To configure, add the following to `routes.js`:
 
-	import { router as awsRouter, awsHelper as awsHelper } from 'snapjs-aws';
-	app.use('/api/aws/', awsRouter);
+    import { router as awsRouter, awsHelper as awsHelper } from 'snapjs-aws';
+    app.use('/api/aws/', awsRouter);
 
 # Updating
 
