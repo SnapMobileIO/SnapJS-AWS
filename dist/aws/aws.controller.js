@@ -24,7 +24,7 @@ var AWS_S3_FILES_BUCKET = process.env.AWS_S3_FILES_BUCKET;
 var AWS_S3_FILES_KEY_PREFIX = process.env.AWS_S3_FILES_KEY_PREFIX;
 var AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
 var AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
-var AWS_S3_FILES_OVERSIZED_PREFIX = process.env.AWS_S3_FILES_OVERSIZED_PREFIX;
+var AWS_S3_VIDEO_OVERSIZED_PREFIX = process.env.AWS_S3_FILES_OVERSIZED_PREFIX;
 
 function uploadToAws(req, res, next) {
   var file = req.file;
@@ -96,8 +96,6 @@ function s3Signature(req, res, next) {
   // Configure aws
   _awsSdk2.default.config.accessKeyId = AWS_ACCESS_KEY_ID;
   _awsSdk2.default.config.secretAccessKey = AWS_SECRET_ACCESS_KEY;
-  // aws.config.region = 'us-west-2';
-  console.log("hello from snapmobile-aws 2.1!");
   if (!req.query.fileType || !req.query.fileName) {
     return res.status(422).json({ error: 'Missing required parameters' });
   }
@@ -109,7 +107,13 @@ function s3Signature(req, res, next) {
 
   // Create random string to ensure unique filenames
   var randomBytes = _crypto2.default.randomBytes(32).toString('hex');
-  var wholeFilePath = AWS_S3_FILES_OVERSIZED_PREFIX + '/' + randomBytes + '/' + fileName;
+  var wholeFilePath = void 0;
+  // we want to make sure the file is a mp4 so we can transcode it
+  if (fileType === 'video/mp4') {
+    wholeFilePath = AWS_S3_VIDEO_OVERSIZED_PREFIX + '/' + randomBytes + '/' + fileName;
+  } else {
+    wholeFilePath = AWS_S3_FILES_KEY_PREFIX + '/' + randomBytes + '/' + fileName;
+  }
 
   var s3Params = {
     Bucket: AWS_S3_FILES_BUCKET,
