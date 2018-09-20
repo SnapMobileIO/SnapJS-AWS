@@ -9,7 +9,7 @@ const AWS_S3_FILES_KEY_PREFIX = process.env.AWS_S3_FILES_KEY_PREFIX;
 const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
 const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 const AWS_S3_VIDEO_OVERSIZED_PREFIX = process.env.AWS_S3_VIDEO_OVERSIZED_PREFIX
-const AWS_REGION = process.env.AWS_REGION
+
 export function uploadToAws(req, res, next) {
   let file = req.file;
 
@@ -88,7 +88,7 @@ export function s3Signature(req, res, next) {
   if (!req.query.fileType || !req.query.fileName) {
     return res.status(422).json({ error: 'Missing required parameters' });
   }
-  const s3 = new aws.S3({ region: AWS_REGION});
+  const s3 = new aws.S3();
   let fileType = req.query.fileType;
 
   // Clean the file name of special characters, extra spaces, etc.
