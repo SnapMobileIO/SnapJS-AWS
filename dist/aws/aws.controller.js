@@ -119,7 +119,7 @@ function s3Signature(req, res, next) {
   var s3Params = {
     Bucket: AWS_S3_FILES_BUCKET,
     Key: wholeFilePath,
-    Expires: 60,
+    Expires: 3600,
     ContentType: fileType,
     ACL: 'public-read'
   };
