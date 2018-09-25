@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.stylesForImage = stylesForImage;
 exports.validateExistence = validateExistence;
 exports.getFile = getFile;
+exports.createMediaConvertJob = createMediaConvertJob;
 
 var _awsSdk = require('aws-sdk');
 
@@ -90,5 +91,56 @@ function getFile(s3Key) {
       console.log('Found file for ' + s3Key + '.');
       resolve(response);
     });
+  });
+}
+
+function createMediaConvertJob(Settings, model) {
+  return new _bluebird2.default(function (resolve, reject) {
+    var regex = new RegExp(process.env.AWS_S3_VIDEO_OVERSIZED_PREFIX + '/', 'g');
+    if (model.video.url.match(regex)) {
+      var sourceS3Bucket = process.env.AWS_S3_FILES_BUCKET;
+      // location of the video
+      var sourceS3Key = model.video.url;
+      var region = process.env.REGION;
+      var endpoint = process.env.ENDPOINT;
+      var sourceS3 = 's3://' + sourceS3Bucket + '/' + sourceS3Key;
+      var destinationS3Key = 's3://' + sourceS3Bucket + '/transcoded/' + sourceS3Key.split('/').reverse()[0].split('.')[0] + sourceS3Key.split('/').reverse()[1];
+
+      if (sourceS3Key === destinationS3Key) {
+        // we need to log all errors in case this breaks
+        // eslint-disable-next-line no-console
+        console.log('Source and destination buckets are the same.');
+        reject('Source and destination buckets are the same.');
+      }
+
+      Settings.OutputGroups[0].OutputGroupSettings.HlsGroupSettings.Destination = destinationS3Key + '/adaptive/video';
+      Settings.OutputGroups[1].OutputGroupSettings.FileGroupSettings.Destination = destinationS3Key + '/thumbnails';
+      Settings.Inputs[0].FileInput = sourceS3;
+      var Role = process.env.MEDIA_CONVERT_ROLE;
+      var params = {
+        Role: Role,
+        Settings: Settings
+      };
+      var options = {
+        region: region, endpoint: endpoint
+      };
+      _awsSdk2.default.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+      _awsSdk2.default.config.secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+
+      var mediaconvert = new _awsSdk2.default.MediaConvert(options);
+      mediaconvert.createJob(params, function (err, response) {
+        if (err) {
+          // we need to log all errors in case this breaks
+          // eslint-disable-next-line no-console
+          console.log('There was an error in creating a mediaConvert job', err); // an error occurred
+          reject(err);
+          model.video.status = 'error';
+        } else {
+          // successful response
+          // model.video.status = 'transcoding';
+          resolve('transcoding');
+        }
+      });
+    }
   });
 }

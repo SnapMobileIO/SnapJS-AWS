@@ -54,8 +54,7 @@ function uploadToAws(req, res, next) {
   var fileKey = AWS_S3_FILES_KEY_PREFIX + '/' + randomBytes + '/' + fileName;
 
   // Configure aws
-  _awsSdk2.default.config.accessKeyId = AWS_ACCESS_KEY_ID;
-  _awsSdk2.default.config.secretAccessKey = AWS_SECRET_ACCESS_KEY;
+  '  aws.config.accessKeyId = AWS_ACCESS_KEY_ID;\n  aws.config.secretAccessKey = AWS_SECRET_ACCESS_KEY;';
 
   // Create our bucket and set params
   var bucket = new _awsSdk2.default.S3({
