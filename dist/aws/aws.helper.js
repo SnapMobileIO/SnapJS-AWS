@@ -133,7 +133,7 @@ function createMediaConvertJob(Settings, model) {
       _awsSdk2.default.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
       _awsSdk2.default.config.secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
 
-      var mediaconvert = new MediaConvert(options);
+      var mediaconvert = new _awsSdk2.default.MediaConvert(options);
       mediaconvert.createJob(params, function (err, response) {
         if (err) {
           // we need to log all errors in case this breaks

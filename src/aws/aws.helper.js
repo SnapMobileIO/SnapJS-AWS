@@ -115,7 +115,7 @@ export function getFile(s3Key) {
       AWS.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
       AWS.config.secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
   
-      const mediaconvert = new MediaConvert(options);
+      const mediaconvert = new AWS.MediaConvert(options);
       mediaconvert.createJob(params, (err, response) => {
         if (err) {
           // we need to log all errors in case this breaks
