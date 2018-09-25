@@ -2,7 +2,7 @@
 
 import AWS from 'aws-sdk';
 import Promise from 'bluebird';
-import * as MediaConvert from 'aws-sdk/clients/mediaconvert';
+// import * as AWS.MediaConvert from 'aws-sdk/clients/mediaconvert';
 /**
  * Generate an array of image style objects based on the S3 key (original url)
  * @param  {String} s3Key The original S3 Key
@@ -110,7 +110,7 @@ export function getFile(s3Key) {
         Settings,
       };
       const options = {
-        region, endpoint,
+        region, endpoint, apiVersion: "2017-08-29"
       };
       AWS.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
       AWS.config.secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;

@@ -16,14 +16,9 @@ var _bluebird = require('bluebird');
 
 var _bluebird2 = _interopRequireDefault(_bluebird);
 
-var _mediaconvert = require('aws-sdk/clients/mediaconvert');
-
-var MediaConvert = _interopRequireWildcard(_mediaconvert);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// import * as AWS.MediaConvert from 'aws-sdk/clients/mediaconvert';
 /**
  * Generate an array of image style objects based on the S3 key (original url)
  * @param  {String} s3Key The original S3 Key
@@ -128,7 +123,7 @@ function createMediaConvertJob(Settings, model) {
         Settings: Settings
       };
       var options = {
-        region: region, endpoint: endpoint
+        region: region, endpoint: endpoint, apiVersion: "2017-08-29"
       };
       _awsSdk2.default.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
       _awsSdk2.default.config.secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
