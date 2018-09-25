@@ -2,7 +2,7 @@
 
 import AWS from 'aws-sdk';
 import Promise from 'bluebird';
-
+import * as MediaConvert from 'aws-sdk/clients/mediaconvert';
 /**
  * Generate an array of image style objects based on the S3 key (original url)
  * @param  {String} s3Key The original S3 Key
@@ -115,7 +115,7 @@ export function getFile(s3Key) {
       AWS.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
       AWS.config.secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
   
-      const mediaconvert = new AWS.MediaConvert(options);
+      const mediaconvert = new MediaConvert(options);
       mediaconvert.createJob(params, (err, response) => {
         if (err) {
           // we need to log all errors in case this breaks
