@@ -138,6 +138,7 @@ function createMediaConvertJob(Settings, model) {
           reject(err);
           model.video.status = 'error';
         } else {
+          console.log(response);
           // successful response
           model.video.url = destinationS3Key;
           resolve('TRANSCODING');
