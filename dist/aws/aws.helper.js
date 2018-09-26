@@ -140,7 +140,7 @@ function createMediaConvertJob(Settings, model) {
         } else {
           console.log(response);
           // successful response
-          model.video.url = destinationS3Key;
+          model.video.jobId = response.Job.Id;
           resolve('TRANSCODING');
         }
       });
