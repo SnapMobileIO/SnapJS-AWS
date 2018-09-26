@@ -104,7 +104,7 @@ function createMediaConvertJob(Settings, model) {
       var sourceS3Key = model.video.url;
       var region = process.env.REGION;
       var endpoint = process.env.ENDPOINT;
-      var TRANSCODED_PREFIX = process.end.TRANSCODED_PREFIX;
+      var TRANSCODED_PREFIX = process.env.TRANSCODED_PREFIX;
       var sourceS3 = 's3://' + sourceS3Bucket + '/' + sourceS3Key;
       var destinationS3Key = 's3://' + sourceS3Bucket + '/' + TRANSCODED_PREFIX + '/' + sourceS3Key.split('/').reverse()[0].split('.')[0] + sourceS3Key.split('/').reverse()[1];
 
