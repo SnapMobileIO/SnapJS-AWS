@@ -140,7 +140,7 @@ function createMediaConvertJob(Settings, model) {
         } else {
           // successful response
           // model.video.status = 'transcoding';
-          resolve('transcoding');
+          resolve('TRANSCODING');
         }
       });
     }

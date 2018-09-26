@@ -127,7 +127,7 @@ export function getFile(s3Key) {
         } else {
           // successful response
           // model.video.status = 'transcoding';
-          resolve('transcoding');
+          resolve('TRANSCODING');
         }
       });
     }
