@@ -90,8 +90,9 @@ export function getFile(s3Key) {
       const sourceS3Key = model.video.url;
       const region = process.env.REGION;
       const endpoint = process.env.ENDPOINT;
+      const TRANSCODED_PREFIX = process.end.TRANSCODED_PREFIX
       const sourceS3 = `s3://${sourceS3Bucket}/${sourceS3Key}`;
-      const destinationS3Key = `s3://${sourceS3Bucket}/transcoded/${sourceS3Key.split('/').reverse()[0].split('.')[0]}${sourceS3Key.split('/').reverse()[1]}`;
+      const destinationS3Key = `s3://${sourceS3Bucket}/${TRANSCODED_PREFIX}/${sourceS3Key.split('/').reverse()[0].split('.')[0]}${sourceS3Key.split('/').reverse()[1]}`;
   
   
       if (sourceS3Key === destinationS3Key) {
