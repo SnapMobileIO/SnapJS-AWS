@@ -139,7 +139,7 @@ function createMediaConvertJob(Settings, model) {
           model.video.status = 'error';
         } else {
           // successful response
-          // model.video.status = 'transcoding';
+          model.video.url = destinationS3Key;
           resolve('TRANSCODING');
         }
       });
