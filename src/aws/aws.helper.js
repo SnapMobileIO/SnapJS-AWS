@@ -102,7 +102,7 @@ export function getFile(s3Key) {
         reject('Source and destination buckets are the same.');
       }
   
-      Settings.OutputGroups[0].OutputGroupSettings.HlsGroupSettings.Destination = `${destinationS3Key}/adaptive/video`;
+      Settings.OutputGroups[0].OutputGroupSettings.HlsGroupSettings.Destination = `${destinationS3Key}/adaptive/${sourceS3Key.split('/').reverse()[0].split('.')[0]}`;
       Settings.OutputGroups[1].OutputGroupSettings.FileGroupSettings.Destination = `${destinationS3Key}/thumbnails`;
       Settings.Inputs[0].FileInput = sourceS3;
       const Role = process.env.MEDIA_CONVERT_ROLE;
