@@ -1,6 +1,6 @@
 # SnapMobile-Aws
 
-# WARNING updating this module to 2.0.0+ is dependant on updating your @snapmobile/snapjs-admin to 1.0.0+
+# WARNING updating this module to 1.1.0+ is dependant on updating your @snapmobile/snapjs-admin to 0.3.12+
 
 # Usage
 
