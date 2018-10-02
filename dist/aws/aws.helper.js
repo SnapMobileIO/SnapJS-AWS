@@ -102,8 +102,8 @@ function createMediaConvertJob(Settings, model) {
       var sourceS3Bucket = process.env.AWS_S3_FILES_BUCKET;
       // location of the video
       var sourceS3Key = model.video.url;
-      var region = process.env.REGION;
-      var endpoint = process.env.ENDPOINT;
+      var region = process.env.AWS_REGION;
+      var endpoint = process.env.AWS_ENDPOINT;
       var TRANSCODED_PREFIX = process.env.TRANSCODED_PREFIX;
       var sourceS3 = 's3://' + sourceS3Bucket + '/' + sourceS3Key;
       var destinationS3Key = 's3://' + sourceS3Bucket + '/' + TRANSCODED_PREFIX + '/' + sourceS3Key.split('/').reverse()[0].split('.')[0] + sourceS3Key.split('/').reverse()[1];

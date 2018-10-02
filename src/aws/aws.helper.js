@@ -88,8 +88,8 @@ export function getFile(s3Key) {
       const sourceS3Bucket = process.env.AWS_S3_FILES_BUCKET;
       // location of the video
       const sourceS3Key = model.video.url;
-      const region = process.env.REGION;
-      const endpoint = process.env.ENDPOINT;
+      const region = process.env.AWS_REGION;
+      const endpoint = process.env.AWS_ENDPOINT;
       const TRANSCODED_PREFIX = process.env.TRANSCODED_PREFIX
       const sourceS3 = `s3://${sourceS3Bucket}/${sourceS3Key}`;
       const destinationS3Key = `s3://${sourceS3Bucket}/${TRANSCODED_PREFIX}/${sourceS3Key.split('/').reverse()[0].split('.')[0]}${sourceS3Key.split('/').reverse()[1]}`;
