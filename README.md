@@ -1,7 +1,5 @@
 # SnapMobile-Aws
 
-# WARNING updating this module to 1.1.0+ is dependant on updating your @snapmobile/snapjs-admin to 0.3.12+
-
 # Usage
 
 Include this private module by adding the following under `dependencies` in `package.json`, and run `npm install`.
@@ -24,3 +22,8 @@ Once changes are completed, run `gulp dist` to process JavaScript files and add 
 version 0.3.12 adds the ability to get a signature for a direct browser upload. You need two new variables in your env file
 AWS_S3_VIDEO_OVERSIZED_PREFIX this is the prefix where the file will be uploaded to
 AWS_REGION this is the region of the aws bucket.
+TRANSCODED_PREFIX is for the createMediaConvertJob helper function
+
+# AWS mediaConvert
+
+We added a helper function that takes the JSON for a job and the object in which the video lives. This function expects that the field is named video
