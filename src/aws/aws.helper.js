@@ -2,7 +2,6 @@
 
 import AWS from 'aws-sdk';
 import Promise from 'bluebird';
-// import * as AWS.MediaConvert from 'aws-sdk/clients/mediaconvert';
 /**
  * Generate an array of image style objects based on the S3 key (original url)
  * @param  {String} s3Key The original S3 Key

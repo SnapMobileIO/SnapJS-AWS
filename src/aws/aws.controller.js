@@ -82,7 +82,6 @@ export function uploadToAws(req, res, next) {
 
 export function s3Signature(req, res, next) {
   // Configure aws
-  console.log("UPDATED VER")
   aws.config.accessKeyId = AWS_ACCESS_KEY_ID;
   aws.config.secretAccessKey = AWS_SECRET_ACCESS_KEY;
   if (!req.query.fileType || !req.query.fileName) {

@@ -18,7 +18,6 @@ var _bluebird2 = _interopRequireDefault(_bluebird);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import * as AWS.MediaConvert from 'aws-sdk/clients/mediaconvert';
 /**
  * Generate an array of image style objects based on the S3 key (original url)
  * @param  {String} s3Key The original S3 Key
