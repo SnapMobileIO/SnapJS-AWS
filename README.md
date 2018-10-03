@@ -18,3 +18,9 @@ To configure, add the following to `routes.js`:
 Make any changes in `/src`.
 
 Once changes are completed, run `gulp dist` to process JavaScript files and add to `/dist`.
+
+# large uploads
+
+version 0.3.12 adds the ability to get a signature for a direct browser upload. You need two new variables in your env file
+AWS_S3_VIDEO_OVERSIZED_PREFIX this is the prefix where the file will be uploaded to
+AWS_REGION this is the region of the aws bucket.
