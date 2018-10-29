@@ -143,6 +143,8 @@ function createMediaConvertJob(Settings, model) {
           resolve('TRANSCODING');
         }
       });
+    } else {
+      resolve('COMPLETE');
     }
   });
 }

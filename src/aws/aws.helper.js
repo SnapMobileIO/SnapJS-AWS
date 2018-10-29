@@ -92,15 +92,15 @@ export function getFile(s3Key) {
       const TRANSCODED_PREFIX = process.env.TRANSCODED_PREFIX
       const sourceS3 = `s3://${sourceS3Bucket}/${sourceS3Key}`;
       const destinationS3Key = `s3://${sourceS3Bucket}/${TRANSCODED_PREFIX}/${sourceS3Key.split('/').reverse()[0].split('.')[0]}${sourceS3Key.split('/').reverse()[1]}`;
-  
-  
+
+
       if (sourceS3Key === destinationS3Key) {
         // we need to log all errors in case this breaks
         // eslint-disable-next-line no-console
         console.log('Source and destination buckets are the same.');
         reject('Source and destination buckets are the same.');
       }
-  
+
       Settings.OutputGroups[0].OutputGroupSettings.HlsGroupSettings.Destination = `${destinationS3Key}/adaptive/${sourceS3Key.split('/').reverse()[0].split('.')[0]}`;
       Settings.OutputGroups[1].OutputGroupSettings.FileGroupSettings.Destination = `${destinationS3Key}/thumbnails`;
       Settings.Inputs[0].FileInput = sourceS3;
@@ -114,7 +114,7 @@ export function getFile(s3Key) {
       };
       AWS.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
       AWS.config.secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-  
+
       const mediaconvert = new AWS.MediaConvert(options);
       mediaconvert.createJob(params, (err, response) => {
         if (err) {
@@ -130,6 +130,8 @@ export function getFile(s3Key) {
           resolve('TRANSCODING');
         }
       });
+    } else {
+      resolve('COMPLETE');
     }
   });
   }
